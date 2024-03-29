@@ -34,3 +34,10 @@ mix.setPublicPath('../public_html/')
     /Providers
       /AppServiceProviver.php
 ```
+
+An alternative solution is create .htaccess file in `public_html/` and put these lines. This will point every request to `public_html/public/` 
+```
+RewriteEngine on
+RewriteCond %{REQUEST_URI} !^public
+RewriteRule ^(.*)$ public/$1 [L]
+```
