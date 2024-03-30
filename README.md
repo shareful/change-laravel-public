@@ -41,3 +41,38 @@ RewriteEngine on
 RewriteCond %{REQUEST_URI} !^public
 RewriteRule ^(.*)$ public/$1 [L]
 ```
+
+
+10- Storage path linking to public
+```
+php artisan storage:link
+```
+
+When don't have ssh access then can try via Artisan class. You can create a route in web.php file then pass a parameter to call method 'storage:link' Then access this URL in the browser.
+
+```
+Route::get('/storage', function(){
+    \Artisan::call('storage:link');
+    return "link process successfully completed";
+});
+```
+
+Second solution is via a php script. Create a simple php file into your public directory just like public/link.php set the file name what ever you want then past bellow code. please remove htaccess file from root if you have. .httacces file should not to be root folder for redirect public/index.php. when you run link.php file. then go to browser write http://domain.com/link.php
+
+If your public folder is `public_html` and laravel core files in `../laravel_core` then 
+```
+<?php
+    $targetFolder = $_SERVER['DOCUMENT_ROOT'].'/../laravel-core/storage/app/public';
+    $linkFolder = $_SERVER['DOCUMENT_ROOT'].'/storage';
+    symlink($targetFolder,$linkFolder);
+    echo 'link process successfully completed';
+?>
+```
+
+11- Laravel cache clear
+Laravel has caching process. it caches so many things. When we manually deploy laravel project so some times it clashed for caching issue. You can simply place the below code in your routes/web.php file of the Laravel application. Then access this URL in the browser to clear the cache of the Laravel application. You can also pass the call function parameter route:clear , config:clear , view:clear
+
+Route::get('/clear-cache', function() {
+    Artisan::call('cache:clear');
+    return "Cache is cleared";
+});
